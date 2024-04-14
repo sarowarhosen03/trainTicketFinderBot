@@ -1,8 +1,7 @@
 import axios from "axios";
 import nodemailer from "nodemailer";
 import {exec} from "child_process";
-import config from './config.json'
-
+import config from './config.json' assert { type: 'json' };
 let from = "Dinajpur"
 let to = "Dhaka"
 let date = "14-Apr-2024"
