@@ -1,7 +1,8 @@
 import axios from "axios";
 import nodemailer from "nodemailer";
 import {exec} from "child_process";
-import  config from './config.json'
+import config from './config.json'
+
 let from = "Dinajpur"
 let to = "Dhaka"
 let date = "14-Apr-2024"
@@ -18,9 +19,9 @@ args.forEach(arg => {
         to = args[args.indexOf(arg) + 1]
     }
     if (arg === '-d') {
-        const t = date.slice( 2)
+        const t = date.slice(2)
 
-        date = args[args.indexOf(arg) + 1]+t
+        date = args[args.indexOf(arg) + 1] + t
         console.log(date)
     }
     if (arg === '-w') {
@@ -34,9 +35,9 @@ args.forEach(arg => {
     }
 })
 if (args.includes('-h')) {
-    console.log(`-f for from -t for to -d for date -t for delay -c for train code -s for seat type`)
-    //example
-    console.log(`node index.mjs -f Dinajpur -t Dhaka -d 05 -w 5000 -c 758 -s S_CHAIR`)
+    console.log(' -f for from -t for to -d for date -w for wait time -c for train code -s for seat type')
+//example
+    console.log(`node index.mjs -f ${from} -t ${to} -d ${date} -w ${waitTiem} -c ${trainCode} -s ${seatType}`)
     process.exit(0)
 
 }
@@ -67,6 +68,7 @@ async function notify(trainNamd, seatCount) {
 
 const url = `https://railspaapi.shohoz.com/v1.0/web/bookings/search-trips-v2?from_city=${from}&to_city=${to}&date_of_journey=${date}&seat_class=${seatType}`
 console.log(url)
+
 async function getTrainInfo(from, to, date, trainCode, seatType) {
 
     const response = await axios.get(url).catch((err) => err);
@@ -82,7 +84,7 @@ async function getTrainInfo(from, to, date, trainCode, seatType) {
     if (!trainfound) {
         console.log('no Train found')
     }
-    const hasSeat = trainfound.seat_types.find(seat => {
+    const hasSeat = trainfound?.seat_types?.find(seat => {
         return (seat.type === seatType && seat.seat_counts.online > 0)
     })
 
@@ -108,7 +110,7 @@ function sleep(ms) {
 }
 
 async function sendReminderToEmail(seats, nameOfTrain) {
-   if(!config) return;
+    if (!config) return;
     const transporter = nodemailer.createTransport({
         host: config.smtp,
         port: 587,
