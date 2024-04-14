@@ -109,7 +109,8 @@ function sleep(ms) {
 }
 
 async function sendReminderToEmail(seats, nameOfTrain) {
-    if (!config) return;
+    if (!config) return
+const eurl = `https://eticket.railway.gov.bd/booking/train/search?fromcity=${from}&tocity=${to}&doj=${date}&class=${seatType}`;
     const transporter = nodemailer.createTransport({
         host: config.smtp,
         port: 587,
@@ -124,7 +125,7 @@ async function sendReminderToEmail(seats, nameOfTrain) {
         to: 'Recipient <sarowarhosen03@gmail.com>',
         subject: 'Ticket found✔',
         text: 'Hello ',
-        html: ` <p> ${seats} seat available in ${nameOfTrain} </p> <a href="${url}">Book Now</a>`
+        html: ` <p>${from}-${to} (${date}) ${seats} seat available   in ${nameOfTrain} </p> <a href="${eurl}">${eurl}</a>`
     };
 
     transporter.sendMail(message, async (err, info) => {
